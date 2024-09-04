@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.bebittech.omnisegment</groupId>
     <artifactId>apppopup</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-beta.0</version>
     <repositories>
         <repository>
             <id>google</id>
