@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.bebittech.omnisegment</groupId>
     <artifactId>apppopup</artifactId>
-    <version>1.0.7</version>
+    <version>1.1.0-beta.0</version>
     <repositories>
         <repository>
             <id>google</id>
@@ -30,6 +30,16 @@
         <dependency>
             <groupId>androidx.lifecycle</groupId>
             <artifactId>lifecycle-runtime</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+        <dependency>
+          <groupId>androidx.webkit</groupId>
+          <artifactId>webkit</artifactId>
+          <version>1.16.0</version>
+        </dependency>
+        <dependency>
+            <groupId>androidx.lifecycle</groupId>
+            <artifactId>lifecycle-process</artifactId>
             <version>2.7.0</version>
         </dependency>
     </dependencies>
