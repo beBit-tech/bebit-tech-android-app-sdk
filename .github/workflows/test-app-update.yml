@@ -1,0 +1,31 @@
+name: Request test app SDK update
+on:
+  push:
+    tags: ['*']
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Existing SDK tag to send to the test app
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ secrets.WORKFLOW_TRIGGER_TOKEN }}
+      SDK_VERSION: ${{ inputs.version || github.event.release.tag_name || github.ref_name }}
+    steps:
+      - name: Request an SDK update PR
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo '::error::WORKFLOW_TRIGGER_TOKEN is required'; exit 1; }
+          if [[ ! "$SDK_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo '::error::Expected an SDK version such as 1.1.0-beta.0'
+            exit 1
+          fi
+          gh workflow run app-update.yml --repo beBit-tech/test-android-app --ref main -f "version=$SDK_VERSION"
