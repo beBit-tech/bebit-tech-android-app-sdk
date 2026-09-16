@@ -23,9 +23,18 @@ jobs:
       - name: Request an SDK update PR
         run: |
           set -euo pipefail
-          test -n "$GH_TOKEN" || { echo '::error::WORKFLOW_TRIGGER_TOKEN is required'; exit 1; }
           if [[ ! "$SDK_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
             echo '::error::Expected an SDK version such as 1.1.0-beta.0'
             exit 1
+          fi
+          if [[ -z "$GH_TOKEN" ]]; then
+            echo '::warning::WORKFLOW_TRIGGER_TOKEN is not configured; skipping the test app SDK update request.'
+            {
+              echo '### Test app SDK update skipped'
+              echo 'WORKFLOW_TRIGGER_TOKEN is not configured. Run app-update.yml manually in beBit-tech/test-android-app with:'
+              printf '\n- version: `%s`\n' "$SDK_VERSION"
+              echo '- Workflow: https://github.com/beBit-tech/test-android-app/actions/workflows/app-update.yml'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
           gh workflow run app-update.yml --repo beBit-tech/test-android-app --ref main -f "version=$SDK_VERSION"
